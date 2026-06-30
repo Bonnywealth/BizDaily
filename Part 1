@@ -1,0 +1,317 @@
+📘 Product Requirements Document (PRD)
+BizDaily MVP
+Version 1.0
+Hackathon Edition
+1. Executive Summary
+Product Name
+
+BizDaily
+
+Tagline
+
+Know Your Numbers. Grow Your Business.
+
+Overview
+
+BizDaily is an AI-powered mobile application that helps Small and Medium-sized Enterprises (SMEs) understand their business performance through simple daily business reporting.
+
+Unlike traditional accounting software, POS systems, or bookkeeping applications, BizDaily does not require users to record every sale or expense individually.
+
+Instead, at the end of each business day, users spend less than one minute entering:
+
+Total Sales
+Total Expenses
+
+If customers purchased on credit, users can optionally record those debts.
+
+BizDaily automatically:
+
+Calculates daily profit.
+Tracks outstanding customer debts.
+Generates business performance insights.
+Calculates a Business Score.
+Produces weekly and monthly reports.
+Highlights trends that help business owners make informed decisions.
+
+The application is designed with a mobile-first approach, recognizing that many African SMEs primarily use smartphones to manage their businesses.
+
+2. Vision
+
+To become Africa's simplest and most trusted AI-powered business intelligence platform for small businesses.
+
+3. Mission
+
+To help every small business owner understand the health of their business by transforming simple daily reports into meaningful insights and smarter business decisions.
+
+4. Problem Statement
+
+Millions of small business owners across Africa do not keep consistent business records.
+
+Existing accounting applications are often:
+
+Too complicated
+Too expensive
+Require bookkeeping knowledge
+Require recording every transaction
+Designed for accountants instead of entrepreneurs
+
+As a result, many business owners cannot answer simple questions such as:
+
+Am I making profit?
+Are my expenses increasing?
+Who still owes me money?
+Is my business improving?
+How did I perform last month?
+
+BizDaily solves this problem by reducing business reporting to less than one minute per day.
+
+5. Goals
+
+The MVP aims to:
+
+Make daily business reporting simple.
+Encourage consistent reporting.
+Provide instant business insights.
+Help users monitor debts.
+Generate professional reports.
+Demonstrate AI-assisted business intelligence.
+6. Success Metrics
+
+The MVP will be considered successful if users can:
+
+✅ Record today's business in under one minute.
+
+✅ View their latest business report immediately.
+
+✅ Track customer debts.
+
+✅ Generate weekly reports.
+
+✅ Generate monthly reports.
+
+✅ Export reports as PDF or Excel.
+
+✅ Understand their business through AI insights.
+
+7. Target Users
+
+The primary audience includes:
+
+Retail shop owners
+Mini supermarkets
+POS agents
+Fashion designers
+Hair salons
+Barbers
+Restaurants
+Food vendors
+Farmers
+Traders
+Freelancers
+Small agencies
+Consultants
+
+The product is intentionally designed for businesses that want quick business insights without maintaining full accounting records.
+
+8. User Persona
+Primary Persona
+
+Name: Ada
+
+Age: 34
+
+Business: Fashion Boutique
+
+Goals
+Know daily profit
+Track customer debts
+Understand monthly performance
+Pain Points
+Doesn't like accounting software
+Doesn't record every transaction
+Often forgets who owes money
+Finds spreadsheets difficult
+Needs
+A simple mobile app
+Quick daily reporting
+Automatic calculations
+Clear business insights
+9. Product Positioning
+
+BizDaily is not:
+
+A POS application.
+An accounting package.
+A bookkeeping system.
+An inventory management system.
+
+BizDaily is:
+
+A Daily Business Review Assistant.
+A Business Intelligence platform for SMEs.
+A decision-support tool.
+A mobile-first productivity application.
+10. Core Product Principles
+
+The product must always remain:
+
+Simple
+
+Users should spend less than one minute recording their business.
+
+Intelligent
+
+The application should explain numbers instead of merely displaying them.
+
+Mobile First
+
+The primary experience is smartphones.
+
+Desktop exists only as a responsive version.
+
+Automatic
+
+Users should never enter:
+
+Date
+Day
+Profit
+Business Score
+
+The system calculates these automatically.
+
+Honest Reporting
+
+If a user misses a day, the application should never estimate values.
+
+Instead, display:
+
+No Business Report Submitted
+
+Sales
+
+Nil
+
+Expenses
+
+Nil
+
+Profit
+
+Nil
+
+This ensures weekly and monthly reports remain accurate.
+
+11. MVP Scope
+
+The MVP includes only the following features:
+
+Home Dashboard
+
+Displays:
+
+Greeting
+Business Name
+Latest Business Report
+KPI Cards
+Business Score
+AI Insight
+Quick Action Cards
+Record Today's Business
+
+Users enter:
+
+Total Sales
+Total Expenses
+
+Optional:
+
+Customer Name
+Amount Owed
+Due Date
+Notes
+
+The application automatically:
+
+Detects local date
+Calculates profit
+Saves report
+Updates dashboard
+Updates Business Score
+Generates AI Insight
+Debt Management
+
+Users can:
+
+View outstanding debts
+Record payments
+View paid debts
+
+Outstanding debt updates automatically after payment.
+
+Business History
+
+Displays previous daily reports.
+
+Missed days display:
+
+Sales — Nil
+
+Expenses — Nil
+
+Profit — Nil
+
+Status:
+
+No Business Report Submitted
+
+Reports
+
+Generate:
+
+Weekly Report
+Monthly Report
+
+Reports include:
+
+Sales
+Expenses
+Profit
+Business Score
+Outstanding Debt
+AI Insights
+
+Export options:
+
+PDF
+Excel
+Settings
+
+Simple settings page containing:
+
+Business Information
+Notifications
+Help
+About
+Logout
+12. Out of Scope (Not Included in MVP)
+
+The following features are intentionally excluded from the MVP:
+
+Inventory Management
+Multi-branch Support
+Staff Management
+Role-based Access Control
+Bank Account Integration
+POS Integration
+Barcode Scanning
+Receipt Scanning (OCR)
+Offline Synchronization
+Tax Calculation
+Payroll Management
+Expense Categories
+Customer CRM
+Supplier Management
+Payment Gateway Integration
+Real Authentication
+Real AI Integration (use demo insights for MVP)
