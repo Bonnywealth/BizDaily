@@ -1,68 +1,75 @@
-export async function exportReportToPDF(payload: { weekly: any[]; monthly: any[]; debts: any[] }) {
-  // Simple HTML-print based PDF export (minimal dependency). For demo MVP, open a new window and call print.
-  const { weekly, monthly, debts } = payload;
-  const html = `
-    <html>
-      <head>
-        <title>BizDaily Report</title>
-        <style>body{font-family: Arial, Helvetica, sans-serif; padding:20px;} h1{font-size:18px;} table{width:100%;border-collapse:collapse;} td,th{border:1px solid #ddd;padding:8px;text-align:left;} </style>
-      </head>
-      <body>
-        <h1>BizDaily Report</h1>
-        <h2>Weekly Summary</h2>
-        <table>
-          <tr><th>Metric</th><th>Value</th></tr>
-          <tr><td>Total Days</td><td>${weekly.length}</td></tr>
-          <tr><td>Sales</td><td>₦${weekly.reduce((s,a:any)=>s+(a.sales||0),0).toLocaleString()}</td></tr>
-          <tr><td>Expenses</td><td>₦${weekly.reduce((s,a:any)=>s+(a.expenses||0),0).toLocaleString()}</td></tr>
-          <tr><td>Profit</td><td>₦${weekly.reduce((s,a:any)=>s+(a.profit||0),0).toLocaleString()}</td></tr>
-        </table>
-        <h2>Monthly Summary</h2>
-        <table>
-          <tr><th>Metric</th><th>Value</th></tr>
-          <tr><td>Total Days</td><td>${monthly.length}</td></tr>
-          <tr><td>Sales</td><td>₦${monthly.reduce((s,a:any)=>s+(a.sales||0),0).toLocaleString()}</td></tr>
-          <tr><td>Expenses</td><td>₦${monthly.reduce((s,a:any)=>s+(a.expenses||0),0).toLocaleString()}</td></tr>
-          <tr><td>Profit</td><td>₦${monthly.reduce((s,a:any)=>s+(a.profit||0),0).toLocaleString()}</td></tr>
-        </table>
-        <h2>Outstanding Debts</h2>
-        <table>
-          <tr><th>Customer</th><th>Amount</th></tr>
-          ${debts.map(d=>`<tr><td>${d.customerName}</td><td>₦${Number(d.amount).toLocaleString()}</td></tr>`).join("")}
-        </table>
-      </body>
-    </html>
-  `;
+export async function exportReportToXLSX(payload: { daily?: any[]; weekly?: any[]; monthly?: any[]; debts?: any[] }) {
+  // Generate an .xlsx workbook using SheetJS (xlsx)
+  if (typeof window === 'undefined') throw new Error('exportReportToXLSX must be called in the browser');
+  const XLSX = await import('xlsx');
 
-  const w = window.open("")!;
-  w.document.write(html);
-  w.document.close();
-  w.focus();
-  w.print();
-  w.close();
-}
+  const wb = XLSX.utils.book_new();
 
-export async function exportReportToXLSX(payload: { weekly: any[]; monthly: any[]; debts: any[] }) {
-  // Minimal Excel-compatible CSV export for MVP
-  const rows: string[] = [];
-  rows.push("Section,Field,Value");
-  rows.push(`Weekly,Total Days,${payload.weekly.length}`);
-  rows.push(`Weekly,Sales,${payload.weekly.reduce((s,a:any)=>s+(a.sales||0),0)}`);
-  rows.push(`Weekly,Expenses,${payload.weekly.reduce((s,a:any)=>s+(a.expenses||0),0)}`);
-  rows.push(`Weekly,Profit,${payload.weekly.reduce((s,a:any)=>s+(a.profit||0),0)}`);
-  rows.push(`Monthly,Total Days,${payload.monthly.length}`);
-  rows.push(`Monthly,Sales,${payload.monthly.reduce((s,a:any)=>s+(a.sales||0),0)}`);
-  rows.push(`Monthly,Expenses,${payload.monthly.reduce((s,a:any)=>s+(a.expenses||0),0)}`);
-  rows.push(`Monthly,Profit,${payload.monthly.reduce((s,a:any)=>s+(a.profit||0),0)}`);
-  rows.push("Debts,Customer,Amount");
-  payload.debts.forEach((d:any) => rows.push(`Debts,${d.customerName},${d.amount}`));
+  // Daily sheet
+  const daily = payload.daily || [];
+  if (daily.length > 0) {
+    const rows = daily.map((r) => ({ Date: r.date, Day: r.day, Sales: r.sales, Expenses: r.expenses, Profit: r.profit, Status: r.status }));
+    const ws = XLSX.utils.json_to_sheet(rows);
+    XLSX.utils.book_append_sheet(wb, ws, 'Daily');
+  }
 
-  const csv = rows.join("\n");
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  // Weekly summary
+  const weekly = payload.weekly || [];
+  const wsWeekly = XLSX.utils.json_to_sheet([
+    { Metric: 'Total Days', Value: weekly.length },
+    { Metric: 'Total Sales', Value: weekly.reduce((s: number, r: any) => s + (r.sales || 0), 0) },
+    { Metric: 'Total Expenses', Value: weekly.reduce((s: number, r: any) => s + (r.expenses || 0), 0) },
+    { Metric: 'Total Profit', Value: weekly.reduce((s: number, r: any) => s + (r.profit || 0), 0) },
+  ]);
+  XLSX.utils.book_append_sheet(wb, wsWeekly, 'Weekly Summary');
+
+  // Monthly summary
+  const monthly = payload.monthly || [];
+  const wsMonthly = XLSX.utils.json_to_sheet([
+    { Metric: 'Total Days', Value: monthly.length },
+    { Metric: 'Total Sales', Value: monthly.reduce((s: number, r: any) => s + (r.sales || 0), 0) },
+    { Metric: 'Total Expenses', Value: monthly.reduce((s: number, r: any) => s + (r.expenses || 0), 0) },
+    { Metric: 'Total Profit', Value: monthly.reduce((s: number, r: any) => s + (r.profit || 0), 0) },
+  ]);
+  XLSX.utils.book_append_sheet(wb, wsMonthly, 'Monthly Summary');
+
+  // Debts sheet
+  const debts = payload.debts || [];
+  if (debts.length > 0) {
+    const wsDebts = XLSX.utils.json_to_sheet(debts.map((d) => ({ Customer: d.customerName, Amount: d.amount, Status: d.status, Recorded: d.dateRecorded, PaidAt: d.paidAt || '' })));
+    XLSX.utils.book_append_sheet(wb, wsDebts, 'Debts');
+  }
+
+  const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+  const blob = new Blob([wbout], { type: 'application/octet-stream' });
   const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
+  const a = document.createElement('a');
   a.href = url;
-  a.download = `bizdaily-report-${new Date().toISOString().slice(0,10)}.csv`;
+  a.download = `bizdaily-report-${new Date().toISOString().slice(0, 10)}.xlsx`;
   a.click();
   URL.revokeObjectURL(url);
+}
+
+export async function exportReportToPDF(containerId = 'report-root') {
+  if (typeof window === 'undefined') throw new Error('exportReportToPDF must be called in the browser');
+  const { jsPDF } = await import('jspdf');
+  const html2canvas = (await import('html2canvas')).default;
+
+  const node = document.getElementById(containerId);
+  if (!node) throw new Error(`Container with id ${containerId} not found`);
+
+  const canvas = await html2canvas(node as HTMLElement, { scale: 2 });
+  const imgData = canvas.toDataURL('image/png');
+  const pdf = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'a4' });
+
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const pageHeight = pdf.internal.pageSize.getHeight();
+
+  // Fit image to page width while preserving aspect ratio
+  const imgProps = (pdf as any).getImageProperties(imgData);
+  const imgWidth = pageWidth - 40; // margins
+  const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+
+  pdf.addImage(imgData, 'PNG', 20, 20, imgWidth, imgHeight);
+  pdf.save(`bizdaily-report-${new Date().toISOString().slice(0, 10)}.pdf`);
 }
