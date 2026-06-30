@@ -1,0 +1,532 @@
+Product Requirements Document (PRD)
+Part 3 – Technical Specification & Business Logic
+32. Technology Stack
+Frontend
+Next.js 15 (App Router)
+React 19
+TypeScript
+Tailwind CSS
+shadcn/ui
+Lucide React
+Recharts
+Backend (MVP)
+
+No backend for Hackathon MVP.
+
+Use local mock data (JSON) or browser local storage to simulate persistence.
+
+Future backend options:
+
+Supabase
+Firebase
+PostgreSQL
+Prisma ORM
+Deployment
+GitHub
+Vercel
+33. Application Architecture
+Landing Website
+        │
+        ▼
+ Explore Demo
+        │
+        ▼
+ Mobile Application
+        │
+        ├── Dashboard
+        ├── Record Business
+        ├── Debt Management
+        ├── Business History
+        ├── Reports
+        └── Settings
+
+The landing page and mobile app should be clearly separated.
+
+34. Folder Structure
+bizdaily/
+│
+├── app/
+│   ├── (marketing)/
+│   │   ├── page.tsx
+│   │   └── layout.tsx
+│   │
+│   ├── demo/
+│   │   ├── page.tsx
+│   │   ├── dashboard/
+│   │   ├── record/
+│   │   ├── debts/
+│   │   ├── history/
+│   │   ├── reports/
+│   │   └── settings/
+│   │
+│   └── layout.tsx
+│
+├── components/
+│   ├── dashboard/
+│   ├── report/
+│   ├── debts/
+│   ├── reports/
+│   ├── charts/
+│   ├── ui/
+│   └── shared/
+│
+├── lib/
+│
+├── hooks/
+│
+├── data/
+│   └── demo-data.ts
+│
+├── types/
+│
+├── utils/
+│
+└── public/
+35. Core Data Models
+Business Report
+BusinessReport
+
+id
+
+date
+
+day
+
+sales
+
+expenses
+
+profit
+
+status
+
+businessScore
+
+createdAt
+
+Example:
+
+Monday
+
+Sales:
+126500
+
+Expenses:
+38200
+
+Profit:
+88300
+
+Status:
+Submitted
+Debt
+Debt
+
+id
+
+customerName
+
+amount
+
+dateRecorded
+
+dueDate
+
+status
+
+notes
+
+Status values:
+
+Outstanding
+Paid
+AI Insight
+Insight
+
+id
+
+title
+
+message
+
+type
+
+generatedAt
+
+Types:
+
+Success
+Warning
+Information
+36. Business Logic
+Profit Calculation
+
+Automatically calculate:
+
+Profit = Sales − Expenses
+
+Users never enter profit manually.
+
+Business Date
+
+Automatically detect:
+
+Local timezone
+Current date
+Day of week
+
+Users never enter:
+
+Date
+Day
+Missing Reports
+
+If a report is missing for a business day:
+
+Create a virtual record.
+
+Display:
+
+Sales
+
+Nil
+
+Expenses
+
+Nil
+
+Profit
+
+Nil
+
+Status
+
+No Business Report Submitted
+
+Never estimate missing values.
+
+37. Outstanding Debt Logic
+
+Outstanding Debt equals:
+
+Sum of all debts
+
+where
+
+Status = Outstanding
+
+Paid debts must never be included.
+
+Example
+
+Ibrahim
+
+35,000
+
+Outstanding
+
+Grace
+
+20,000
+
+Paid
+
+John
+
+15,000
+
+Outstanding
+
+Dashboard displays:
+
+Outstanding Debt
+
+50,000
+38. Business Score Logic (MVP)
+
+Business Score ranges from:
+
+0–100
+
+Calculate using five equally weighted factors.
+
+Factor	Weight
+Profit Trend	20%
+Sales Consistency	20%
+Expense Control	20%
+Debt Recovery	20%
+Reporting Consistency	20%
+
+Example:
+
+Profit Trend
+
+18
+
+Sales Consistency
+
+20
+
+Expense Control
+
+17
+
+Debt Recovery
+
+16
+
+Reporting Consistency
+
+20
+
+Business Score
+
+91
+
+Display:
+
+Business Score
+
+91 / 100
+39. AI Insight Engine (MVP)
+
+For the MVP, generate insights using simple rules.
+
+Example rules:
+
+If profit increased:
+
+Your profit increased compared to last week.
+
+If expenses increased:
+
+Your expenses are increasing. Monitor spending carefully.
+
+If debt reduced:
+
+Outstanding debt has reduced this week.
+
+If reports are missed:
+
+You missed one business report this week.
+
+Only display one featured insight on the Dashboard.
+
+40. Dashboard Refresh Logic
+
+After saving today's business:
+
+Immediately:
+
+Calculate profit.
+Save report.
+Update Business Score.
+Update Outstanding Debt.
+Generate Insight.
+Return to Dashboard.
+Refresh KPI cards.
+
+No page reload should be required.
+
+41. Business History Logic
+
+Business History displays:
+
+Every business day in chronological order.
+
+Submitted days:
+
+Display values.
+
+Missing days:
+
+Display Nil.
+
+Never remove missing days.
+
+This ensures reports remain accurate.
+
+42. Weekly Report Logic
+
+Generate:
+
+Monday
+
+Tuesday
+
+Wednesday
+
+Thursday
+
+Friday
+
+Saturday
+
+Sunday
+
+Display:
+
+Sales
+
+Expenses
+
+Profit
+
+Business Score
+
+Missing days:
+
+Nil
+
+Totals
+
+Total Sales
+
+Total Expenses
+
+Total Profit
+
+Outstanding Debt
+
+Average Daily Profit
+
+Business Score
+
+43. Monthly Report Logic
+
+Generate:
+
+One record for every calendar day.
+
+Missing days:
+
+Nil
+
+Summary:
+
+Monthly Sales
+
+Monthly Expenses
+
+Monthly Profit
+
+Business Score
+
+Outstanding Debt
+
+Average Daily Profit
+
+44. Export Logic
+
+PDF
+
+Contains:
+
+Business information
+
+Charts
+
+Summary
+
+Business Score
+
+Outstanding Debt
+
+Insights
+
+Excel
+
+Contains:
+
+Date
+
+Sales
+
+Expenses
+
+Profit
+
+Status
+
+Business Score
+
+45. Mock Data
+
+Business Name
+
+Bonnywealth Enterprise
+
+Monday
+
+Sales
+
+126,500
+
+Expenses
+
+38,200
+
+Profit
+
+88,300
+
+Outstanding Debts
+
+Ibrahim
+
+35,000
+
+Grace Ventures
+
+22,500
+
+Chinedu Stores
+
+48,000
+
+Esther Enterprise
+
+36,500
+
+Business Score
+
+91
+
+AI Insight
+
+Profit increased by 18% compared to last week.
+
+46. Performance Requirements
+
+The application should:
+
+Load in under 3 seconds.
+Feel responsive on mobile.
+Use smooth transitions.
+Support modern mobile browsers.
+Work well on Android and iPhone viewport sizes.
+47. Accessibility
+Large touch targets.
+Clear typography.
+High color contrast.
+Keyboard accessible where applicable.
+Semantic HTML.
+48. Acceptance Criteria
+
+The MVP is complete when a user can:
+
+Open the landing page.
+Enter the demo.
+View the Home Dashboard.
+See only the latest expected business report.
+Record today's business.
+Automatically calculate profit.
+Manage outstanding debts.
+Record debt payments.
+View business history.
+Generate weekly reports.
+Generate monthly reports.
+Export reports as PDF.
+Export reports as Excel.
+View AI insights.
+View Business Score.
