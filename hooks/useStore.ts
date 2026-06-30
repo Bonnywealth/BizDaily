@@ -1,21 +1,23 @@
+import { demoBusinessReports, demoDebts, demoInsights } from "../data/demo-data";
+import { useReportsStore } from "../stores/useReportsStore";
+import { useDebtsStore } from "../stores/useDebtsStore";
+import { useInsightsStore } from "../stores/useInsightsStore";
+
 /**
- * Placeholder hook for application store.
- * We'll use Zustand (recommended) with persist in the next phase.
- *
- * For now, export an object with the function shapes expected by components.
+ * hooks/useStore.ts
+ * Convenience exports to access all stores from components if desired.
  */
 
-import { BusinessReport, Debt, AIInsight } from "../types/domain";
+export function useAppSeed() {
+  const setReports = useReportsStore((s) => s.setReports);
+  const setDebts = useDebtsStore((s) => s.setDebts);
+  const setInsights = useInsightsStore((s) => s.setInsights);
 
-export function useAppStore() {
-  // placeholder API surface
-  return {
-    reports: [] as BusinessReport[],
-    debts: [] as Debt[],
-    insights: [] as AIInsight[],
-    addReport: (r: BusinessReport) => {},
-    addDebt: (d: Debt) => {},
-    markDebtPaid: (id: string, paidAt?: string) => {},
-    seedDemoData: (data: { reports: BusinessReport[]; debts: Debt[]; insights: AIInsight[] }) => {},
-  };
+  function seedDemo() {
+    setReports(demoBusinessReports);
+    setDebts(demoDebts);
+    setInsights(demoInsights);
+  }
+
+  return { seedDemo };
 }

@@ -1,8 +1,12 @@
 "use client";
 import React from "react";
 import Link from "next/link";
+import { useSettingsStore } from "../../stores/useSettingsStore";
+import { demoBusinessReports, demoDebts, demoInsights } from "../../data/demo-data";
 
 export default function DemoEntry() {
+  const initialized = useSettingsStore((s) => s.initialized);
+
   return (
     <div className="min-h-screen p-4 max-w-md mx-auto">
       <header className="mb-6">
@@ -15,9 +19,9 @@ export default function DemoEntry() {
           <a className="block w-full text-center py-3 bg-indigo-600 text-white rounded-lg">Enter Demo</a>
         </Link>
 
-        <div className="text-sm text-slate-600">
-          This demo uses local data only; no authentication required.
-        </div>
+        <div className="text-sm text-slate-600">{initialized ? "Demo previously initialized." : "Initializing demo data on first entry..."}</div>
+
+        <div className="pt-4 text-xs text-slate-500">This demo uses local data only; no authentication required.</div>
       </main>
     </div>
   );
