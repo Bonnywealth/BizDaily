@@ -1,12 +1,18 @@
 "use client";
 import React from "react";
-import TimelineList from "../../../components/history/TimelineList";
+import HistoryList from "../../../components/history/HistoryList";
 
 export default function HistoryPage() {
   return (
-    <div className="min-h-screen p-4 max-w-md mx-auto">
-      <h1 className="text-xl font-semibold mb-3">Business History</h1>
-      <TimelineList />
+    <div className="max-w-3xl mx-auto p-4">
+      <header className="mb-4">
+        <h2 className="text-xl font-semibold">Business History</h2>
+        <p className="text-sm text-slate-600">View past daily reports and virtual entries for missing days.</p>
+      </header>
+
+      <section>
+        <HistoryList days={14} />
+      </section>
     </div>
   );
 }
