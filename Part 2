@@ -1,0 +1,574 @@
+Product Requirements Document (PRD)
+Part 2 – Information Architecture, User Flows & Screen Specifications
+13. Information Architecture
+BizDaily
+│
+├── Landing Page
+│
+├── Demo Access
+│
+└── Mobile Application
+    │
+    ├── Home Dashboard
+    │
+    ├── Record Today's Business
+    │
+    ├── Debt Management
+    │
+    ├── Business History
+    │
+    ├── Generate Reports
+    │
+    └── Settings
+
+The MVP is intentionally small.
+
+Every feature begins from the Home Dashboard.
+
+14. Navigation Structure
+
+The application follows a hub-and-spoke navigation model.
+
+The Home Dashboard acts as the central hub.
+
+From the Home screen, users access every feature through Quick Action cards.
+
+Navigation flow:
+
+Landing Page
+      │
+      ▼
+Explore Demo
+      │
+      ▼
+Home Dashboard
+      │
+      ├── Record Today's Business
+      ├── Debt Management
+      ├── Business History
+      ├── Generate Reports
+      └── Settings
+
+There should be no desktop sidebar.
+
+Navigation should feel like a native mobile application.
+
+15. Landing Page
+Purpose
+
+Introduce BizDaily and encourage users to explore the demo.
+
+Sections
+Hero
+
+Headline
+
+Every Small Business Deserves an AI Business Advisor.
+
+Subheading
+
+BizDaily transforms simple daily business reports into intelligent business insights.
+
+Buttons
+
+Get Started
+Explore Demo
+Features
+
+Display four feature cards.
+
+Daily Business Reports
+AI Business Insights
+Business Score
+Debt Tracking
+Mobile Preview
+
+Show a premium smartphone mockup displaying the Home Dashboard.
+
+Footer
+
+Simple footer containing:
+
+About
+Privacy
+Contact
+Copyright
+16. Demo Access
+
+No real authentication.
+
+Clicking Explore Demo immediately opens the application using preloaded demo data.
+
+Business Name:
+
+Bonnywealth Enterprise
+
+17. Home Dashboard
+
+The Home Dashboard is the heart of BizDaily.
+
+Users should understand their business within five seconds of opening the app.
+
+Header
+
+Display:
+
+👋 Welcome Back
+
+Bonnywealth Enterprise
+
+Let's review your business.
+
+18. Latest Business Report
+
+Display only one report.
+
+Always display the latest expected business report.
+
+Examples:
+
+Today = Tuesday
+
+Display:
+
+Monday Report
+
+If Monday exists:
+
+Sales
+
+Expenses
+
+Profit
+
+Outstanding Debt
+
+If Monday does not exist:
+
+Monday Report
+
+Sales
+
+Nil
+
+Expenses
+
+Nil
+
+Profit
+
+Nil
+
+Outstanding Debt
+
+Current Outstanding Balance
+
+Status
+
+No Business Report Submitted
+
+Never display more than one report.
+
+Older reports belong only in Business History.
+
+19. KPI Cards
+
+Display four KPI cards.
+
+Card 1
+
+Sales
+
+Card 2
+
+Expenses
+
+Card 3
+
+Profit
+
+Automatically calculated.
+
+Card 4
+
+Outstanding Debt
+
+Automatically updated whenever debts are paid.
+
+20. Business Score
+
+Display below the KPI cards.
+
+Use a circular progress component.
+
+Example:
+
+91 / 100
+
+Description
+
+Business Score is calculated from:
+
+Profit trends
+Expense control
+Sales consistency
+Debt recovery
+Daily reporting consistency
+
+Only one score is displayed.
+
+21. AI Insight Card
+
+Display only ONE featured insight.
+
+Examples
+
+💡 Profit increased by 18% this week.
+
+⚠ Expenses increased compared to last week.
+
+📈 Sales reached the highest level this month.
+
+💰 Outstanding debts reduced by ₦20,000.
+
+Display one card only.
+
+22. Quick Actions
+
+Display six large rounded action cards.
+
+These function like the OPay home shortcuts.
+
+Layout:
+
+📝 Record Today's Business
+
+🤝 Debt Management
+
+📜 Business History
+
+📄 Generate Reports
+
+⚙ Settings
+
+❓ Help
+
+Each card opens its own screen.
+
+23. Record Today's Business
+
+Purpose:
+
+Allow users to record today's business summary.
+
+Fields
+
+Total Sales
+
+(number)
+
+Total Expenses
+
+(number)
+
+Outstanding Debts
+
+Optional
+
+Button:
+
+Add Debtor
+
+Fields:
+
+Customer Name
+
+Amount Owed
+
+Due Date (optional)
+
+Notes (optional)
+
+Primary Button
+
+Save Today's Business
+
+Automatic Processing
+
+After Save:
+
+System automatically:
+
+Detect today's local date.
+
+Calculate:
+
+Profit
+
+Sales − Expenses
+
+Save report.
+
+Update dashboard.
+
+Update Business Score.
+
+Generate AI Insight.
+
+Return user to Home.
+
+24. Debt Management
+
+Purpose
+
+Manage customers owing money.
+
+Tabs
+
+Outstanding
+
+Paid
+
+Outstanding Tab
+
+Display:
+
+Customer Name
+
+Amount
+
+Date Recorded
+
+Due Date
+
+Status
+
+Outstanding
+
+Button
+
+Record Payment
+
+Record Payment
+
+After payment:
+
+Move customer to Paid.
+
+Reduce Outstanding Debt.
+
+Refresh Home Dashboard.
+
+Paid Tab
+
+Display:
+
+Customer Name
+
+Amount Paid
+
+Payment Date
+
+Status
+
+Paid
+
+25. Business History
+
+Purpose
+
+Display all historical business reports.
+
+Timeline layout.
+
+Example
+
+Monday
+
+Submitted
+
+Sales
+
+Expenses
+
+Profit
+
+Tuesday
+
+No Business Report Submitted
+
+Sales
+
+Nil
+
+Expenses
+
+Nil
+
+Profit
+
+Nil
+
+Wednesday
+
+Submitted
+
+Sales
+
+Expenses
+
+Profit
+
+Filters
+
+Weekly
+
+Monthly
+
+Yearly
+
+Custom Range
+
+Tapping a record opens full details.
+
+26. Report Details
+
+Displays
+
+Business Day
+
+Sales
+
+Expenses
+
+Profit
+
+Business Score
+
+AI Insight generated that day
+
+Debt recorded that day
+
+Status
+
+Submitted
+
+or
+
+No Business Report Submitted
+
+27. Generate Reports
+
+Purpose
+
+Generate summarized reports.
+
+Options
+
+Weekly
+
+Monthly
+
+Generated Report contains
+
+Total Sales
+
+Total Expenses
+
+Total Profit
+
+Business Score
+
+Outstanding Debt
+
+AI Summary
+
+Daily Breakdown
+
+Charts
+
+Charts
+
+Line Chart
+
+Sales
+
+Expenses
+
+Profit
+
+Missing reports display
+
+Nil
+
+Never estimate values.
+
+Buttons
+
+Export PDF
+
+Export Excel
+
+28. Settings
+
+Simple settings.
+
+Business Information
+
+Notifications
+
+Help
+
+About
+
+Logout
+
+29. Empty States
+
+No Report
+
+"No business report has been submitted."
+
+No Debt
+
+"You currently have no outstanding debts."
+
+No AI Insight
+
+"Submit today's business to receive AI-powered insights."
+
+No History
+
+"No business reports available yet."
+
+30. Success Messages
+
+After saving report
+
+✅ Today's business has been recorded successfully.
+
+After recording payment
+
+✅ Debt payment recorded successfully.
+
+After exporting report
+
+✅ Report exported successfully.
+
+31. Error Messages
+
+Invalid Sales
+
+Please enter a valid sales amount.
+
+Invalid Expenses
+
+Please enter a valid expense amount.
+
+Customer Name Missing
+
+Customer name is required.
+
+Amount Missing
+
+Please enter the debt amount.
