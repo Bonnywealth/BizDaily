@@ -119,7 +119,7 @@ function ChartCard({
   return (
     <div className="mt-4 bg-card border border-slate-line/60 rounded-xl2 p-4">
       <h2 className="text-[13px] font-semibold text-ink">{title}</h2>
-      <div className="h-[140px] mt-2 -ml-2">
+      <div className="h-[200px] mt-4 -ml-4">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" stroke="#E7E4DF" vertical={false} />
