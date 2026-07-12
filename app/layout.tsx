@@ -8,13 +8,13 @@ import ScoreGauge from "@/components/ScoreGauge";
 import { todayLocal, shortWeekday, formatMoney } from "@/lib/date";
 import { calculateBusinessScore } from "@/lib/businessScore";
 import { getAIInsight } from "@/lib/aiInsight";
-import { Bell, Wallet, Receipt, PlusCircle, BarChart3 } from "lucide-react";
+import { Bell, Wallet, Receipt, TrendingUp, AlertCircle, Sparkles, PlusCircle, Users, History, BarChart3 } from "lucide-react";
 import clsx from "clsx";
 
 export default function DashboardPage() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
-  const { hasEnteredApp, isDemoMode, isAuthenticated, user, businessDays, debtors, resetDemoData, isDataLoading } = useStore();
+  const { hasEnteredApp, isDemoMode, isAuthenticated, user, businessDays, debtors, isDataLoading } = useStore();
 
   useEffect(() => {
     setMounted(true);
@@ -25,6 +25,7 @@ export default function DashboardPage() {
 
   const today = todayLocal();
   const todayReport = businessDays.find((d) => d.date === today);
+  const outstandingDebt = debtors.filter((d) => d.status === "outstanding").reduce((s, d) => s + d.amount, 0);
   const score = calculateBusinessScore(businessDays, debtors);
   const insight = getAIInsight(businessDays, debtors);
   const displayName = user?.username || (isDemoMode ? "Explorer" : "there");
@@ -32,35 +33,45 @@ export default function DashboardPage() {
   return (
     <>
       <main className="flex-1 px-5 pt-5 pb-24">
+        {/* Top bar */}
         <div className="flex items-center justify-between">
-          <div className="font-display font-bold text-ink">BizDaily</div>
+          <div>
+            <p className="font-display text-[15px] font-bold text-ink">BizDaily</p>
+            <p className="text-[10.5px] text-slate-muted">Track your growth</p>
+          </div>
           <button className="w-9 h-9 rounded-full bg-card border border-slate-line flex items-center justify-center">
             <Bell size={16} className="text-ink/70" />
           </button>
         </div>
 
-        <div className="mt-5 bg-royal rounded-xl2 px-5 py-5 text-white">
+        {/* Welcome */}
+        <div className="mt-5 bg-royal rounded-xl2 px-5 py-5 text-white shadow-lg">
           <p className="text-[12.5px] font-medium text-white/80">👋 Welcome Back</p>
-          <p className="font-display text-xl font-bold mt-0.5">{displayName}</p>
+          <p className="font-display text-xl font-bold">{displayName}</p>
         </div>
 
-        <div className="mt-5 grid grid-cols-2 gap-2">
+        {/* 4 Stat Cards - Restored! */}
+        <div className="mt-5 grid grid-cols-2 gap-3">
           <StatCard icon={Wallet} color="marigold" label="Sales" value={todayReport ? formatMoney(todayReport.sales) : "Nil"} />
           <StatCard icon={Receipt} color="royal" label="Expenses" value={todayReport ? formatMoney(todayReport.expenses) : "Nil"} />
+          <StatCard icon={TrendingUp} color="emerald" label="Profit" value={todayReport ? formatMoney(todayReport.profit) : "Nil"} />
+          <StatCard icon={AlertCircle} color="rust" label="Debt" value={formatMoney(outstandingDebt)} />
         </div>
 
+        {/* Insight */}
         <div className="mt-5 bg-card rounded-xl2 border border-slate-line/60 p-4 flex items-start gap-4">
-          <div className="shrink-0"><ScoreGauge score={score.total} size={60} /></div>
-          <div className="flex-1 min-w-0">
-            <p className="text-[11.5px] font-semibold text-ink">Insight</p>
-            <p className="text-[12.5px] text-ink/75 mt-1 truncate">{insight.message}</p>
+          <ScoreGauge score={score.total} size={60} />
+          <div className="flex-1">
+            <p className="text-[11.5px] font-semibold text-ink flex items-center gap-1"><Sparkles size={12} className="text-marigold" /> Insight</p>
+            <p className="text-[12.5px] text-ink/75 mt-1">{insight.message}</p>
           </div>
         </div>
 
+        {/* Actions */}
         <h2 className="font-display text-[15px] font-semibold text-ink mt-6 mb-3">Quick Actions</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <QuickAction icon={PlusCircle} label="Record Business" onClick={() => router.push("/record")} />
-          <QuickAction icon={BarChart3} label="Reports" onClick={() => router.push("/reports")} />
+        <div className="grid grid-cols-1 gap-3">
+          <QuickAction icon={PlusCircle} label="Record Today's Business" onClick={() => router.push("/record")} />
+          <QuickAction icon={BarChart3} label="View Full Report" onClick={() => router.push("/reports")} />
         </div>
       </main>
       <BottomNav />
@@ -77,23 +88,23 @@ const badgeStyles = {
 
 function StatCard({ icon: Icon, color, label, value }: { icon: any, color: keyof typeof badgeStyles, label: string, value: string }) {
   return (
-    <div className="bg-card rounded-xl2 border border-slate-line/60 p-3.5">
-      <div className={clsx("w-8 h-8 rounded-full flex items-center justify-center", badgeStyles[color])}>
+    <div className="bg-card rounded-xl2 border border-slate-line/60 p-3.5 shadow-sm">
+      <div className={clsx("w-8 h-8 rounded-full flex items-center justify-center mb-2", badgeStyles[color])}>
         <Icon size={15} />
       </div>
-      <p className="text-[11px] font-medium text-slate-muted mt-2">{label}</p>
-      <p className="font-mono text-[14px] font-semibold text-ink mt-0.5 truncate">{value}</p>
+      <p className="text-[11px] font-medium text-slate-muted">{label}</p>
+      <p className="font-mono text-[14px] font-bold text-ink">{value}</p>
     </div>
   );
 }
 
 function QuickAction({ icon: Icon, label, onClick }: { icon: any, label: string, onClick: () => void }) {
   return (
-    <button onClick={onClick} className="bg-card rounded-xl2 border border-slate-line/60 p-4 flex items-center gap-3 text-left">
+    <button onClick={onClick} className="bg-card rounded-xl2 border border-slate-line/60 p-4 flex items-center gap-3 w-full shadow-sm">
       <div className="w-9 h-9 rounded-full bg-royal-soft flex items-center justify-center">
-        <Icon size={17} className="text-royal" />
+        <Icon size={18} className="text-royal" />
       </div>
-      <span className="text-[12.5px] font-semibold text-ink">{label}</span>
+      <span className="text-[13px] font-semibold text-ink">{label}</span>
     </button>
   );
 }
