@@ -160,7 +160,7 @@ export default function DashboardPage() {
 
         {/* Quick actions */}
         <h2 className="font-display text-[15px] font-semibold text-ink mt-6 mb-3">Quick Actions</h2>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <QuickAction
             icon={PlusCircle}
             label="Record Today's Business"
