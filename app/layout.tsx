@@ -1,110 +1,58 @@
-"use client";
+import type { Metadata, Viewport } from "next";
+import { Space_Grotesk, Inter, IBM_Plex_Mono } from "next/font/google";
+import "./globals.css";
+import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
+import AuthSync from "@/components/AuthSync";
 
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useStore } from "@/lib/store";
-import BottomNav from "@/components/BottomNav";
-import ScoreGauge from "@/components/ScoreGauge";
-import { todayLocal, shortWeekday, formatMoney } from "@/lib/date";
-import { calculateBusinessScore } from "@/lib/businessScore";
-import { getAIInsight } from "@/lib/aiInsight";
-import { Bell, Wallet, Receipt, TrendingUp, AlertCircle, Sparkles, PlusCircle, Users, History, BarChart3 } from "lucide-react";
-import clsx from "clsx";
+const display = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  variable: "--font-display",
+});
+const body = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-body",
+});
+const mono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-mono",
+});
 
-export default function DashboardPage() {
-  const router = useRouter();
-  const [mounted, setMounted] = useState(false);
-  const { hasEnteredApp, isDemoMode, isAuthenticated, user, businessDays, debtors, isDataLoading } = useStore();
-
-  useEffect(() => {
-    setMounted(true);
-    if (!hasEnteredApp || (!isDemoMode && !isAuthenticated)) router.replace("/");
-  }, [hasEnteredApp, isDemoMode, isAuthenticated, router]);
-
-  if (!mounted || isDataLoading) return null;
-
-  const today = todayLocal();
-  const todayReport = businessDays.find((d) => d.date === today);
-  const outstandingDebt = debtors.filter((d) => d.status === "outstanding").reduce((s, d) => s + d.amount, 0);
-  const score = calculateBusinessScore(businessDays, debtors);
-  const insight = getAIInsight(businessDays, debtors);
-  const displayName = user?.username || (isDemoMode ? "Explorer" : "there");
-
-  return (
-    <>
-      <main className="flex-1 px-5 pt-5 pb-24">
-        {/* Top bar */}
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="font-display text-[15px] font-bold text-ink">BizDaily</p>
-            <p className="text-[10.5px] text-slate-muted">Track your growth</p>
-          </div>
-          <button className="w-9 h-9 rounded-full bg-card border border-slate-line flex items-center justify-center">
-            <Bell size={16} className="text-ink/70" />
-          </button>
-        </div>
-
-        {/* Welcome */}
-        <div className="mt-5 bg-royal rounded-xl2 px-5 py-5 text-white shadow-lg">
-          <p className="text-[12.5px] font-medium text-white/80">👋 Welcome Back</p>
-          <p className="font-display text-xl font-bold">{displayName}</p>
-        </div>
-
-        {/* 4 Stat Cards - Restored! */}
-        <div className="mt-5 grid grid-cols-2 gap-3">
-          <StatCard icon={Wallet} color="marigold" label="Sales" value={todayReport ? formatMoney(todayReport.sales) : "Nil"} />
-          <StatCard icon={Receipt} color="royal" label="Expenses" value={todayReport ? formatMoney(todayReport.expenses) : "Nil"} />
-          <StatCard icon={TrendingUp} color="emerald" label="Profit" value={todayReport ? formatMoney(todayReport.profit) : "Nil"} />
-          <StatCard icon={AlertCircle} color="rust" label="Debt" value={formatMoney(outstandingDebt)} />
-        </div>
-
-        {/* Insight */}
-        <div className="mt-5 bg-card rounded-xl2 border border-slate-line/60 p-4 flex items-start gap-4">
-          <ScoreGauge score={score.total} size={60} />
-          <div className="flex-1">
-            <p className="text-[11.5px] font-semibold text-ink flex items-center gap-1"><Sparkles size={12} className="text-marigold" /> Insight</p>
-            <p className="text-[12.5px] text-ink/75 mt-1">{insight.message}</p>
-          </div>
-        </div>
-
-        {/* Actions */}
-        <h2 className="font-display text-[15px] font-semibold text-ink mt-6 mb-3">Quick Actions</h2>
-        <div className="grid grid-cols-1 gap-3">
-          <QuickAction icon={PlusCircle} label="Record Today's Business" onClick={() => router.push("/record")} />
-          <QuickAction icon={BarChart3} label="View Full Report" onClick={() => router.push("/reports")} />
-        </div>
-      </main>
-      <BottomNav />
-    </>
-  );
-}
-
-const badgeStyles = {
-  marigold: "bg-marigold-soft text-marigold",
-  royal: "bg-royal-soft text-royal",
-  emerald: "bg-emerald-soft text-emerald",
-  rust: "bg-rust-soft text-rust",
+export const metadata: Metadata = {
+  title: "BizDaily — How is business today?",
+  description:
+    "Track daily sales, expenses and debts. No accounting knowledge required.",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "BizDaily",
+  },
 };
 
-function StatCard({ icon: Icon, color, label, value }: { icon: any, color: keyof typeof badgeStyles, label: string, value: string }) {
-  return (
-    <div className="bg-card rounded-xl2 border border-slate-line/60 p-3.5 shadow-sm">
-      <div className={clsx("w-8 h-8 rounded-full flex items-center justify-center mb-2", badgeStyles[color])}>
-        <Icon size={15} />
-      </div>
-      <p className="text-[11px] font-medium text-slate-muted">{label}</p>
-      <p className="font-mono text-[14px] font-bold text-ink">{value}</p>
-    </div>
-  );
-}
+export const viewport: Viewport = {
+  themeColor: "#14213D",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+};
 
-function QuickAction({ icon: Icon, label, onClick }: { icon: any, label: string, onClick: () => void }) {
-  return (
-    <button onClick={onClick} className="bg-card rounded-xl2 border border-slate-line/60 p-4 flex items-center gap-3 w-full shadow-sm">
-      <div className="w-9 h-9 rounded-full bg-royal-soft flex items-center justify-center">
-        <Icon size={18} className="text-royal" />
-      </div>
-      <span className="text-[13px] font-semibold text-ink">{label}</span>
-    </button>
-  );
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`}>
+      <body className="font-body bg-paper text-ink min-h-dvh">
+        <ServiceWorkerRegister />
+        <AuthSync />
+        <div className="mx-auto max-w-md min-h-dvh flex flex-col bg-paper">
+          {children}
+        </div>
+      </body>
+    </html>
+  );
 }
