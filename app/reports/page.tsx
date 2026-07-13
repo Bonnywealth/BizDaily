@@ -116,42 +116,55 @@ function ChartCard({
   color: string;
   domain?: [number, number];
 }) {
+  const hasData = data.some((d) => d[dataKey] !== null && d[dataKey] !== undefined);
+
   return (
     <div className="mt-4 bg-card border border-slate-line/60 rounded-xl2 p-4">
       <h2 className="text-[13px] font-semibold text-ink">{title}</h2>
-      <div className="h-[200px] mt-4 -ml-4">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#E7E4DF" vertical={false} />
-            <XAxis
-              dataKey="label"
-              tick={{ fontSize: 10, fill: "#6B7280" }}
-              axisLine={false}
-              tickLine={false}
-              interval="preserveStartEnd"
-            />
-            <YAxis
-              tick={{ fontSize: 10, fill: "#6B7280" }}
-              axisLine={false}
-              tickLine={false}
-              width={36}
-              domain={domain}
-            />
-            <Tooltip
-              formatter={(v: any) => (v === null ? "No report" : v)}
-              contentStyle={{ fontSize: 12, borderRadius: 10, borderColor: "#E7E4DF" }}
-            />
-            <Line
-              type="monotone"
-              dataKey={dataKey}
-              stroke={color}
-              strokeWidth={2.4}
-              dot={false}
-              connectNulls={false}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
+      {hasData ? (
+        <div style={{ height: 140 }} className="mt-2 -ml-2">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={data}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#E7E4DF" vertical={false} />
+              <XAxis
+                dataKey="label"
+                tick={{ fontSize: 10, fill: "#6B7280" }}
+                axisLine={false}
+                tickLine={false}
+                interval="preserveStartEnd"
+              />
+              <YAxis
+                tick={{ fontSize: 10, fill: "#6B7280" }}
+                axisLine={false}
+                tickLine={false}
+                width={36}
+                domain={domain}
+              />
+              <Tooltip
+                formatter={(v: any) => (v === null ? "No report" : v)}
+                contentStyle={{ fontSize: 12, borderRadius: 10, borderColor: "#E7E4DF" }}
+              />
+              <Line
+                type="monotone"
+                dataKey={dataKey}
+                stroke={color}
+                strokeWidth={2.4}
+                dot={false}
+                connectNulls={false}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      ) : (
+        <div
+          style={{ height: 140 }}
+          className="mt-2 flex items-center justify-center text-center px-6"
+        >
+          <p className="text-[12px] text-slate-muted leading-snug">
+            No data yet for this period — record a business day to see this trend.
+          </p>
+        </div>
+      )}
     </div>
   );
 }
