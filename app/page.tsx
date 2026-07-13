@@ -29,7 +29,7 @@ export default function LandingPage() {
       <div className="bg-ink px-6 pt-8 pb-10">
         <div className="flex items-center gap-2.5">
           <Mark />
-          <span className="font-display text-2xl font-bold text-white tracking-tight">
+          <span className="font-display text-xl font-bold text-white tracking-tight">
             BizDaily
           </span>
         </div>
@@ -41,12 +41,12 @@ export default function LandingPage() {
       {/* Bordered content card, overlapping the header */}
       <div className="flex-1 flex flex-col -mt-4 rounded-t-[1.75rem] border border-slate-line bg-paper px-6 pt-8 pb-8">
         <div className="flex-1 flex flex-col justify-center">
-          <h1 className="font-display text-[2.35rem] leading-[1.1] font-semibold text-ink">
+          <h1 className="font-display text-[1.9rem] leading-[1.15] font-semibold text-ink">
             How is business
             <br />
             today?
           </h1>
-          <p className="mt-4 text-[15px] text-slate-muted leading-relaxed max-w-[30ch]">
+          <p className="mt-4 text-[13.5px] text-slate-muted leading-relaxed max-w-[30ch]">
             Log your sales and expenses in ten seconds — even by voice. BizDaily
             handles the profit math, the debt tracking, and the insights.
           </p>
@@ -61,13 +61,13 @@ export default function LandingPage() {
         <div className="mt-10 flex flex-col gap-3">
           <button
             onClick={() => router.push("/auth?mode=signup")}
-            className="w-full bg-ink text-white font-semibold rounded-xl2 py-3.5 text-[15px] active:scale-[0.98] transition-transform"
+            className="w-full bg-ink text-white font-semibold rounded-xl2 py-3.5 text-[14px] active:scale-[0.98] transition-transform"
           >
             Create my account
           </button>
           <button
             onClick={() => router.push("/auth?mode=login")}
-            className="w-full bg-transparent text-ink font-semibold rounded-xl2 py-3.5 text-[15px] border border-slate-line active:scale-[0.98] transition-transform"
+            className="w-full bg-transparent text-ink font-semibold rounded-xl2 py-3.5 text-[14px] border border-slate-line active:scale-[0.98] transition-transform"
           >
             I already have an account
           </button>
@@ -97,7 +97,7 @@ function Feature({ icon: Icon, text }: { icon: typeof TrendingUp; text: string }
       <div className="shrink-0 w-9 h-9 rounded-full bg-card border border-slate-line flex items-center justify-center">
         <Icon size={16} className="text-emerald" strokeWidth={2.2} />
       </div>
-      <span className="text-[13.5px] text-ink/80 font-medium">{text}</span>
+      <span className="text-[12.5px] text-ink/80 font-medium">{text}</span>
     </div>
   );
 }
