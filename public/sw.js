@@ -1,4 +1,4 @@
-const CACHE_NAME = "bizdaily-v1";
+const CACHE_NAME = "bizdaily-v2";
 const OFFLINE_URLS = ["/", "/dashboard", "/record", "/debts", "/history", "/reports", "/settings"];
 
 self.addEventListener("install", (event) => {
