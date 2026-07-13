@@ -1,4 +1,5 @@
 "use client";
+
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useStore } from "@/lib/store";
@@ -54,7 +55,7 @@ export default function DashboardPage() {
 
   if (isDataLoading) {
     return (
-      <main className="flex-1 flex items-center justify-center min-h-screen">
+      <main className="flex-1 flex items-center justify-center">
         <p className="text-[13px] text-slate-muted font-medium">Loading your business records…</p>
       </main>
     );
@@ -65,13 +66,14 @@ export default function DashboardPage() {
   const outstandingDebt = debtors
     .filter((d) => d.status === "outstanding")
     .reduce((s, d) => s + d.amount, 0);
+  const isNewUser = businessDays.length === 0;
   const score = calculateBusinessScore(businessDays, debtors);
   const insight = getAIInsight(businessDays, debtors);
   const displayName = user?.username || (isDemoMode ? "Explorer" : "there");
 
   return (
     <>
-      <main className="flex-1 px-5 pt-5 pb-24 min-h-[calc(100vh-80px)]">
+      <main className="flex-1 px-5 pt-5 pb-6">
         {/* Top bar */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -119,8 +121,7 @@ export default function DashboardPage() {
           </span>
         </div>
 
-        {/* Stat Cards */}
-        <div className="mt-3 grid grid-cols-2 gap-2">
+        <div className="mt-3 grid grid-cols-2 gap-3">
           <StatCard
             icon={Wallet}
             color="marigold"
@@ -147,24 +148,41 @@ export default function DashboardPage() {
           />
         </div>
 
-        {/* Score + Insight */}
-        <div className="mt-5 bg-card rounded-xl2 shadow-card border border-slate-line/60 p-4 flex items-start gap-4">
-          <div className="shrink-0">
-            <ScoreGauge score={score.total} size={80} />
-          </div>
-          <div className="flex-1 overflow-hidden">
-            <p className="text-[11.5px] font-semibold text-ink flex items-center gap-1">
-              <Sparkles size={13} className="text-marigold" /> BizDaily Insight
+        {/* Score + Insight, side by side — or a welcoming first-time card */}
+        {isNewUser ? (
+          <button
+            onClick={() => router.push("/record")}
+            className="mt-5 w-full bg-royal rounded-xl2 p-5 text-left active:scale-[0.98] transition-transform"
+          >
+            <p className="text-[11.5px] font-semibold text-white/80 flex items-center gap-1">
+              <Sparkles size={13} /> Let's get started
             </p>
-            <p className="text-[12.5px] text-ink/75 mt-1.5 leading-snug break-words">
-              {insight.message}
+            <p className="text-white font-display text-[16px] font-semibold mt-1.5 leading-snug">
+              Record your first business day
             </p>
+            <p className="text-[12.5px] text-white/75 mt-1 leading-snug">
+              Your Business Score and insights unlock as soon as you log your first day's sales
+              and expenses — takes about ten seconds.
+            </p>
+            <span className="inline-block mt-3 text-[12.5px] font-semibold text-royal bg-white rounded-full px-4 py-2">
+              Record today's business →
+            </span>
+          </button>
+        ) : (
+          <div className="mt-5 bg-card rounded-xl2 shadow-card border border-slate-line/60 p-4 flex items-center gap-4">
+            <ScoreGauge score={score.total} size={104} />
+            <div className="flex-1 min-w-0">
+              <p className="text-[11.5px] font-semibold text-ink flex items-center gap-1">
+                <Sparkles size={13} className="text-marigold" /> BizDaily Insight
+              </p>
+              <p className="text-[12.5px] text-ink/75 mt-1.5 leading-snug">{insight.message}</p>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Quick actions */}
         <h2 className="font-display text-[15px] font-semibold text-ink mt-6 mb-3">Quick Actions</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3">
           <QuickAction
             icon={PlusCircle}
             label="Record Today's Business"
@@ -204,7 +222,7 @@ function StatCard({
         <Icon size={15} strokeWidth={2.2} />
       </div>
       <p className="text-[11px] font-medium text-slate-muted mt-2">{label}</p>
-      <p className="font-mono text-[14px] font-semibold text-ink tabular-nums mt-0.5 break-words overflow-hidden">{value}</p>
+      <p className="font-mono text-[14px] font-semibold text-ink tabular-nums mt-0.5">{value}</p>
     </div>
   );
 }
